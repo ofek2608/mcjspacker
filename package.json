@@ -1,0 +1,25 @@
+{
+  "name": "mcjspacker",
+  "version": "0.1.0",
+  "description": "A library and CLI to build Minecraft datapacks from JavaScript.",
+  "main": "src/index.js",
+  "bin": {
+    "mcjspacker": "bin/mcjspacker.js"
+  },
+  "scripts": {
+    "watch": "node bin/mcjspacker.js example/datapack.js --watch example",
+    "build": "node bin/mcjspacker.js example/datapack.js",
+    "testNoArg": "node bin/mcjspacker.js"
+  },
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "yargs": "^18.0.0"
+  },
+  "type": "module",
+  "directories": {
+    "example": "example"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
