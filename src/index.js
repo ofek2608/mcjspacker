@@ -1,38 +1,41 @@
-import { parentPort } from 'worker_threads';
+import fs from 'fs/promises';
+import path from 'path';
 
-let nextFunctionId = 0;
+async function deleteDirectory(dir) {
+  if (await fs.exists(dir)) {
+    await fs.rmdir(dir, { recursive: true });
+  }
+}
+
+async function saveFile(outputDir, functionName, content) {
+  const filePath = path.normalize(path.join(outputDir, functionName));
+  const normalizedDir = path.normalize(outputDir + '/');
+  if (!filePath.startsWith(normalizedDir)) {
+    console.error(`Invalid function name: ${functionName}`);
+    return;
+  }
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, content);
+}
+
+function cleanFunctionContent(content) {
+  return content
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .join('\n');
+}
 
 export function createMCF({outputDir, functionCallPrefix}) {
-  parentPort.postMessage({ type: 'requestDir', path: outputDir });
+  const deleteDirectoryPromise = deleteDirectory(outputDir);
+  let anonymousFunctionId = 0;
 
-  return (strings, ...values) => {
-    const id = nextFunctionId++;
-    const parts = [];
-    function addStringPart(str) {
-      if (parts.length > 0 && typeof parts[parts.length - 1] === 'string') {
-        parts[parts.length - 1] += str;
-      } else {
-        parts.push(str);
-      }
-    }
+  return (arg0, arg1) => {
+    const functionContent = arg1 === undefined ? arg0 : arg1;
+    const functionName = arg1 === undefined ? `anonymous/anonymous_${anonymousFunctionId++}` : arg0;
 
-    for (let i = 0; i < strings.length; i++) {
-      addStringPart(strings[i]);
-      if (i < values.length) {
-        const value = values[i];
-        if (typeof value === 'object' && value !== null && typeof value._id === 'number') {
-          parts.push(value._id);
-        } else {
-          addStringPart(`${value}`);
-        }
-      }
-    }
-    parentPort.postMessage({ type: 'newFunction', dir: outputDir, prefix: functionCallPrefix, parts });
-    return {
-      _id: id,
-      name: (newName) => {
-        parentPort.postMessage({ type: 'functionName', id, name: newName });
-      }
-    };
+    deleteDirectoryPromise.then(() => saveFile(outputDir, functionName, cleanFunctionContent(functionContent)));
+
+    return `${functionCallPrefix}${functionName}`
   }
-} 
+}
