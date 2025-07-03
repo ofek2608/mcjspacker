@@ -60,7 +60,7 @@ Use dynamic names for functions or folders.
 #### **Function call:** `` `${mcf.funcName}` `` or `'' + mcf.funcName`
 - Converts it into a function call string `'function {functionCallPrefix}func_name'`.
 > [!TIP]
-> mcjspacker is smart to insert `:` or `/` if needed
+> mcjspacker will insert `:` or `/` after `functionCallPrefix` if needed
 
 ### Recommended Usage Style
 
