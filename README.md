@@ -24,6 +24,7 @@ cd my-datapack
 npm install
 ```
 
+> [!NOTE]  
 > This will create a new directory `my-datapack` with example files and all dependencies installed.
 
 ## Documentation
@@ -35,7 +36,11 @@ Initializes the generator.
   - `outputDir` (string): Output directory for generated files.
   - `functionCallPrefix` (string): Prefix for function calls (e.g., 'mydatapack:').
 
-- **⚠️ Calling this function will delete the directory `outputDir` and all its contents.**
+> [!WARNING]  
+> Calling this function will delete the directory `outputDir` and all its contents.
+
+> [!WARNING]
+> Do not call this function twice with related `outputDir` as it will override eachother.
 
 #### **Named function:** ``mcf.functionName`...` ``
 - `{outputDir}/function_name.mcfunction`.
@@ -54,7 +59,8 @@ Use dynamic names for functions or folders.
 
 #### **Function call:** `` `${mcf.funcName}` `` or `'' + mcf.funcName`
 - Converts it into a function call string `'function {functionCallPrefix}func_name'`.
-- 💡 *note: mcjspacker is smart to insert `:` or `/` if needed*
+> [!TIP]
+> mcjspacker is smart to insert `:` or `/` if needed
 
 ### Recommended Usage Style
 
@@ -80,7 +86,7 @@ export const mcfInAFolder = createMCF({
 
 // ===== playerKit.js =====
 
-import mcf from "mcf.js";
+import mcf from "./mcf.js";
 const directory = mcf.playerKit;
 // declare public functions
 export const { giveStarterKit , giveAdvancedKit } = directory;
