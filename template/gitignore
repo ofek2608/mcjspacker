@@ -1,0 +1,6 @@
+# environment
+node_modules/
+.vscode/
+
+# generated files
+data/{namespace}/function/

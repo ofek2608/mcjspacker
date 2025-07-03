@@ -19,13 +19,35 @@ A modern JavaScript-based generator for Minecraft datapack functions. Write Mine
 You can quickly scaffold a new project using `npx`:
 
 ```sh
-npx mcjspacker my-datapack
-cd my-datapack
+npx mcjspacker <directory> [namespace]
+cd <directory>
 npm install
 ```
 
+- `<directory>`: The directory to create (relative or absolute path). If it exists and is not empty, the command will abort.
+- `[namespace]` (optional): The namespace to use for the datapack. If omitted, the directory name is used (normalized).
+
 > [!NOTE]  
-> This will create a new directory `my-datapack` with example files and all dependencies installed.
+> This will create a new directory `<directory>` with example files and all dependencies installed.
+
+> [!TIP]
+> It's recommended to pick `<directory>` as a directory in your world's datapacks directory. for example: `%APPDATA%/.minecraft/saves/TestingWorld/datapacks/mypack`
+
+### Run the Project
+
+To generate your datapack files, use the following commands:
+
+```sh
+npm run build
+```
+This will run your main script (default to `src/index.js`) and generate the Minecraft function files in the appropriate output directory (e.g., `data/<namespace>/function`).
+
+```sh
+npm run watch
+```
+This will watch your `src/` directory for changes and automatically rebuild your datapack whenever you save a file. This is useful for rapid development and iteration.
+
+After running either command, you should see generated files in the `data/` directory, ready to be used as a Minecraft datapack.
 
 ## Documentation
 
@@ -168,8 +190,8 @@ const items = [
 ];
 
 // for each item define 'give @s ...'
-const functions = items.map({name,model} => mcf[`give_${item.name}`]`
-  give @s item_frame{item_name:'${item.name}',model:'${item.model}'}
+const functions = items.map(({ name, model }) => mcf[`give_${name}`]`
+  give @s item_frame{item_name:'${name}',model:'${model}'}
 `);
 
 // call all of the functions

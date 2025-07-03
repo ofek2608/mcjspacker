@@ -1,0 +1,15 @@
+{
+  "name": "{namespace}",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "watch": "chokidar src --initial -c \"npm run build\"",
+    "build": "node src/index.js"
+  },
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0"
+  },
+  "dependencies": {
+    "mcjspacker": "^{version}"
+  }
+} 

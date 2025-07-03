@@ -43,7 +43,7 @@ function getFunctionContent(strings, ...values) {
 }
 
 function isValidPathPart(part) {
-  return part.match(/^[a-z0-9/:_-]+$/);
+  return part.match(/^[a-z0-9/:_-]+$/g);
 }
 
 function toSnakeCase(str) {
